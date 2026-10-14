@@ -307,7 +307,7 @@ function LandingPage() {
 }
 
 function AuthPage({ mode }) {
-  const { login, register } = useAuth();
+  const { login, loginDemo, register } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: '',
@@ -361,6 +361,11 @@ function AuthPage({ mode }) {
     }
   };
 
+  const handleDemoLogin = () => {
+    loginDemo();
+    navigate('/dashboard');
+  };
+
   return (
     <div className="auth-page">
       <div className="auth-card">
@@ -404,10 +409,10 @@ function AuthPage({ mode }) {
         </p>
 
         {mode === 'login' && (
-          <div style={{ marginTop: 20, padding: 12, borderRadius: 10, background: 'rgba(56, 189, 248, 0.08)', border: '1px solid rgba(56, 189, 248, 0.2)', fontSize: '0.85rem' }}>
-            <p style={{ margin: 0, color: 'var(--muted)' }}>
-              <strong>Demo Admin:</strong> admin@aijobtrainer.com / Admin@123
-            </p>
+          <div style={{ marginTop: 20 }}>
+            <button type="button" className="secondary-btn" onClick={handleDemoLogin} style={{ width: '100%' }}>
+              Continue as demo student
+            </button>
           </div>
         )}
       </div>

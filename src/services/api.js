@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { demoAdapter, isDemoMode } from './demoApi';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL.replace(/\/+$/, '');
 
@@ -9,6 +10,11 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
+    if (isDemoMode()) {
+      config.adapter = demoAdapter;
+      return config;
+    }
+
     const token = localStorage.getItem('aiJobTrainerToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;

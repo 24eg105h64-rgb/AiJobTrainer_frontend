@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import api from '../services/api';
+import { DEMO_TOKEN, endDemoSession, getDemoUser, isDemoMode, startDemoSession } from '../services/demoApi';
 
 const AuthContext = createContext(null);
 
@@ -10,6 +11,12 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     if (!token) {
+      setLoading(false);
+      return;
+    }
+
+    if (token === DEMO_TOKEN && isDemoMode()) {
+      setUser(getDemoUser());
       setLoading(false);
       return;
     }
@@ -28,6 +35,7 @@ export function AuthProvider({ children }) {
   }, [token]);
 
   const login = async (email, password) => {
+    endDemoSession();
     const response = await api.post('/auth/login', { email, password });
     const nextToken = response.data.token;
     localStorage.setItem('aiJobTrainerToken', nextToken);
@@ -37,6 +45,7 @@ export function AuthProvider({ children }) {
   };
 
   const register = async (userData) => {
+    endDemoSession();
     const response = await api.post('/auth/register', userData);
     const nextToken = response.data.token;
     localStorage.setItem('aiJobTrainerToken', nextToken);
@@ -45,7 +54,15 @@ export function AuthProvider({ children }) {
     return response.data;
   };
 
+  const loginDemo = () => {
+    const demoUser = startDemoSession();
+    localStorage.setItem('aiJobTrainerToken', DEMO_TOKEN);
+    setToken(DEMO_TOKEN);
+    setUser(demoUser);
+  };
+
   const logout = () => {
+    endDemoSession();
     localStorage.removeItem('aiJobTrainerToken');
     setToken('');
     setUser(null);
@@ -58,6 +75,7 @@ export function AuthProvider({ children }) {
       loading,
       isAuthenticated: Boolean(token && user),
       login,
+      loginDemo,
       register,
       logout,
       setUser,
