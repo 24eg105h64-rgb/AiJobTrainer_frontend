@@ -1,5 +1,9 @@
 # React + Vite
 
+## API configuration
+
+Local development uses the Vite `/api` proxy. For a deployed frontend, set the build environment variable `VITE_API_BASE_URL` to the backend URL ending in `/api` (for example, `https://your-backend.onrender.com/api`) and redeploy. This value is public in the browser bundle; never put secrets in frontend environment variables.
+
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
 Currently, two official plugins are available:
