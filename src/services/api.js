@@ -3,7 +3,7 @@ import axios from 'axios';
 const backendUrl = import.meta.env.VITE_BACKEND_URL.replace(/\/+$/, '');
 
 const api = axios.create({
-  baseURL: import.meta.env.DEV ? '/api' : `${backendUrl}/api`,
+  baseURL: `${backendUrl}/api`,
   timeout: 30000,
 });
 
